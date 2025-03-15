@@ -46,6 +46,7 @@ public class Doctor {
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id", nullable = false, unique = true)
+	@JsonIgnore
 	private User user;
 
 	@OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
@@ -54,5 +55,6 @@ public class Doctor {
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "address_id")
+	@JsonIgnore
 	private Address address;
 }

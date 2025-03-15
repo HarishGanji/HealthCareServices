@@ -105,17 +105,16 @@ public class UserServiceImplementation implements UserService {
 		return user;
 	}
 
-	private Address createAddressFromDTO(RegisterDTO dto) {
-		if (dto.getAddress() == null)
-			return null;
-
-		Address address = new Address();
-		address.setStreet(dto.getAddress().getStreet());
-		address.setCity(dto.getAddress().getCity());
-		address.setState(dto.getAddress().getState());
-		address.setZipCode(dto.getAddress().getZipcode());
-		return address;
-	}
+//	private Address createAddressFromDTO(RegisterDTO dto) {
+//		if (dto.getAddress() == null)
+//			return null;
+//		Address address = new Address();
+//		address.setStreet(dto.getAddress().getStreet());
+//		address.setCity(dto.getAddress().getCity());
+//		address.setState(dto.getAddress().getState());
+//		address.setZipCode(dto.getAddress().getZipcode());
+//		return address;
+//	}
 
 	private void createRoleSpecificEntity(User user, RegisterDTO dto) {
 		switch (user.getRole()) {
@@ -136,24 +135,24 @@ public class UserServiceImplementation implements UserService {
 	private Doctor createDoctor(User user, RegisterDTO dto) {
 		Doctor doctor = new Doctor();
 		populateCommonFields(doctor, user);
-		doctor.setAddress(createAddressFromDTO(dto));
+//		doctor.setAddress(null);
 		return doctor;
 	}
 
 	private Administrator createAdministrator(User user, RegisterDTO dto) {
 		Administrator admin = new Administrator();
 		populateCommonFields(admin, user);
-		admin.setAddress(createAddressFromDTO(dto));
+//		admin.setAddress(null);
 		return admin;
 	}
 
 	private Patient createPatient(User user, RegisterDTO dto) {
-		if (dto.getAddress() == null) {
-			throw new IllegalArgumentException("Address is required for patient registration");
-		}
+//		if (dto.getAddress() == null) {
+//			throw new IllegalArgumentException("Address is required for patient registration");
+//		}
 		Patient patient = new Patient();
 		populateCommonFields(patient, user);
-		patient.setAddress(createAddressFromDTO(dto));
+//		patient.setAddress(null);
 		return patient;
 	}
 
@@ -183,6 +182,7 @@ public class UserServiceImplementation implements UserService {
 		response.setEmail(user.getEmail());
 		response.setRole(user.getRole());
 		response.setMessage(message);
+		response.setUUID(user.getRole()+":"+user.getUserId());
 		return response;
 	}
 

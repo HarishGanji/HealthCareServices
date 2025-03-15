@@ -1,5 +1,6 @@
 package com.healthcare.system.dtos;
 
+
 import com.healthcare.system.enums.Role;
 
 import lombok.AllArgsConstructor;
@@ -10,9 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthResponse {
-    private String token;
-    private String email;
-    private Role role;
-    private int statusCode;
-    private String message;
+	private String token;
+	private String email;
+	private Role role;
+	private int statusCode;
+	private String message;
+	private String UUID;
 }

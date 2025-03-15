@@ -32,7 +32,7 @@ public class JWTutil {
 				.expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME)).signWith(key).compact();
 	}
 
-	public String extractUsername(String token) {
+	public String extractEmail(String token) {
 		return extractClaims(token, Claims::getSubject);
 	}
 
@@ -50,7 +50,7 @@ public class JWTutil {
 	}
 
 	public boolean isValidToken(String token, UserDetails userDetails) {
-		final String username = extractUsername(token);
+		final String username = extractEmail(token);
 		return (username.equals(userDetails.getUsername()) && !isTokenExpire(token));
 	}
 

@@ -1,9 +1,7 @@
 package com.healthcare.system.security;
 
-
 import java.io.IOException;
 import java.util.Collections;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,7 +19,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import com.healthcare.system.security.JWTutil;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -44,18 +41,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		}
 
 		String jwtToken = authHeader.substring(7);
-		String username;
+		String email;
 
 		try {
-			username = jwtUtil.extractUsername(jwtToken);
+			email = jwtUtil.extractEmail(jwtToken);
 		} catch (Exception e) {
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.getWriter().write("Invalid JWT Token");
 			return;
 		}
 
-		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-			UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+		if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+			UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
 			if (jwtUtil.isValidToken(jwtToken, userDetails)) {
 				String role = jwtUtil.extractRole(jwtToken);

@@ -1,5 +1,6 @@
 package com.healthcare.system.dtos;
 
+import com.healthcare.system.enums.Role;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,7 +19,7 @@ public class RegisterDTO {
 
 	private String phoneNumber;
 
-	private com.healthcare.system.enums.Role role;
+	private Role role;
 
-	private AddressDTO address;
+//	private AddressDTO address;
 }
