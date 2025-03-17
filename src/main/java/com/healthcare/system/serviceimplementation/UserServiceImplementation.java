@@ -24,31 +24,27 @@ import com.healthcare.system.repository.UserRepository;
 import com.healthcare.system.security.JWTutil;
 import com.healthcare.system.service.UserService;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserServiceImplementation implements UserService {
 
-	private final UserRepository userRepo;
-	private final PasswordEncoder passwordEncoder;
-	private final JWTutil jwtUtils;
-	private final AuthenticationManager authenticationManager;
-	private final DoctorRepository doctorRepo;
-	private final PatientRepository patientRepo;
-	private final AdministratorRepository adminRepo;
-
 	@Autowired
-	public UserServiceImplementation(UserRepository userRepo, PasswordEncoder passwordEncoder, JWTutil jwtUtils,
-			AuthenticationManager authenticationManager, DoctorRepository doctorRepo, PatientRepository patientRepo,
-			AdministratorRepository adminRepo) {
-		this.userRepo = userRepo;
-		this.passwordEncoder = passwordEncoder;
-		this.jwtUtils = jwtUtils;
-		this.authenticationManager = authenticationManager;
-		this.doctorRepo = doctorRepo;
-		this.patientRepo = patientRepo;
-		this.adminRepo = adminRepo;
-	}
+	UserRepository userRepo;
+	@Autowired
+	PasswordEncoder passwordEncoder;
+	@Autowired
+	JWTutil jwtUtils;
+	@Autowired
+	AuthenticationManager authenticationManager;
+	@Autowired
+	DoctorRepository doctorRepo;
+	@Autowired
+	PatientRepository patientRepo;
+	@Autowired
+	AdministratorRepository adminRepo;
 
 	@Override
 	public AuthResponse login(AuthRequest loginRequest) {
@@ -182,7 +178,7 @@ public class UserServiceImplementation implements UserService {
 		response.setEmail(user.getEmail());
 		response.setRole(user.getRole());
 		response.setMessage(message);
-		response.setUUID(user.getRole()+":"+user.getUserId());
+		response.setUUID(user.getRole() + ":" + user.getUserId());
 		return response;
 	}
 
@@ -192,4 +188,19 @@ public class UserServiceImplementation implements UserService {
 		response.setMessage(message);
 		return response;
 	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

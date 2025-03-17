@@ -19,7 +19,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -41,18 +40,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		}
 
 		String jwtToken = authHeader.substring(7);
-		String email;
+		String user;
 
 		try {
-			email = jwtUtil.extractEmail(jwtToken);
+			user = jwtUtil.extractUser(jwtToken);
 		} catch (Exception e) {
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.getWriter().write("Invalid JWT Token");
 			return;
 		}
 
-		if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-			UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+		if (user != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+			UserDetails userDetails = userDetailsService.loadUserByUsername(user);
 
 			if (jwtUtil.isValidToken(jwtToken, userDetails)) {
 				String role = jwtUtil.extractRole(jwtToken);

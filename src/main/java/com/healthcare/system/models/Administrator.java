@@ -38,8 +38,8 @@ public class Administrator {
 	@JoinColumn(name = "department_id")
 	private Department department;
 
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", nullable = false)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+ 	@JoinColumn(name = "user_id", nullable = false)
 	@JsonIgnore
 	private User user;
 

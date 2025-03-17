@@ -26,4 +26,5 @@ public class DoctorController {
 		return new ResponseEntity<>(docterServ.addOrEditSpecialization(doctorId, doctor), HttpStatus.OK);
 	}
 
+	
 }

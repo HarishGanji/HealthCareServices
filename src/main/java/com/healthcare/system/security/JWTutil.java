@@ -1,6 +1,5 @@
 package com.healthcare.system.security;
 
-
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Date;
@@ -13,6 +12,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import com.healthcare.system.models.User;
 
 @Service
 public class JWTutil {
@@ -28,14 +29,21 @@ public class JWTutil {
 	}
 
 	public String generateToken(UserDetails userDetails) {
-		return Jwts.builder().subject(userDetails.getUsername()).issuedAt(new Date(System.currentTimeMillis()))
+		User user = (User) userDetails; 
+		return Jwts.builder().subject(userDetails.getUsername())
+				.claim("userId", user.getUserId().toString())
+	            .claim("role", user.getRole().name()).issuedAt(new Date(System.currentTimeMillis()))
 				.expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME)).signWith(key).compact();
 	}
 
-	public String extractEmail(String token) {
+	public String extractUser(String token) {
 		return extractClaims(token, Claims::getSubject);
 	}
-
+	
+	public String extractUserId(String token) {
+	    return extractClaims(token, claims -> claims.get("userId", String.class));
+	}
+	
 	public String extractRole(String token) {
 		String role = extractClaims(token, claims -> claims.get("role", String.class));
 
@@ -50,7 +58,7 @@ public class JWTutil {
 	}
 
 	public boolean isValidToken(String token, UserDetails userDetails) {
-		final String username = extractEmail(token);
+		final String username = extractUser(token);
 		return (username.equals(userDetails.getUsername()) && !isTokenExpire(token));
 	}
 

@@ -45,10 +45,12 @@ public class Patient {
 
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "address_id")
+	@JsonIgnore
 	private Address address;
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(name = "user_id", nullable = false, unique = true)
+	@JoinColumn(name = "user_id")
+	@JsonIgnore
 	private User user;
 
 	@OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
