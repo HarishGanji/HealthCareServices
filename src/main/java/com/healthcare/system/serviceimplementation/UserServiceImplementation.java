@@ -97,7 +97,7 @@ public class UserServiceImplementation implements UserService {
 		user.setEmail(dto.getEmail());
 		user.setPassword(passwordEncoder.encode(dto.getPassword()));
 		user.setPhoneNumber(dto.getPhoneNumber());
-		user.setRole(Optional.ofNullable(dto.getRole()).orElse(Role.ROLE_PATIENT));
+		user.setRole(Optional.ofNullable(dto.getRole()).orElse(Role.PATIENT));
 		return user;
 	}
 
@@ -114,13 +114,13 @@ public class UserServiceImplementation implements UserService {
 
 	private void createRoleSpecificEntity(User user, RegisterDTO dto) {
 		switch (user.getRole()) {
-		case ROLE_DOCTOR:
+		case DOCTOR:
 			doctorRepo.save(createDoctor(user, dto));
 			break;
-		case ROLE_ADMIN:
+		case ADMIN:
 			adminRepo.save(createAdministrator(user, dto));
 			break;
-		case ROLE_PATIENT:
+		case PATIENT:
 			patientRepo.save(createPatient(user, dto));
 			break;
 		default:
@@ -179,15 +179,15 @@ public class UserServiceImplementation implements UserService {
 		response.setRole(user.getRole());
 		response.setMessage(message);
 
-		if (user.getRole().equals(Role.ROLE_PATIENT)) {
+		if (user.getRole().equals(Role.PATIENT)) {
 			UUID patId = patientRepo.getPatientByUserId(user.getUserId());
 			response.setUUID(user.getRole() + ":" + patId);
 		}
-		if (user.getRole().equals(Role.ROLE_DOCTOR)) {
+		if (user.getRole().equals(Role.DOCTOR)) {
 			UUID docId = doctorRepo.getDoctorByUserId(user.getUserId());
 			response.setUUID(user.getRole() + ":" + docId);
 		}
-		if (user.getRole().equals(Role.ROLE_ADMIN)) {
+		if (user.getRole().equals(Role.ADMIN)) {
 			UUID adminId = adminRepo.getAdministratorByUserId(user.getUserId());
 			response.setUUID(user.getRole() + ":" + adminId);
 		}

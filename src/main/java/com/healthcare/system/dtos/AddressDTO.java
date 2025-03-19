@@ -1,5 +1,7 @@
 package com.healthcare.system.dtos;
 
+import java.util.UUID;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,8 +10,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AddressDTO {
-    private String street;
-    private String city;
-    private String state;
-    private String zipcode;
+	private UUID addressId;
+
+	private String street;
+
+	private String city;
+
+	private String state;
+
+	private String zipCode;
+
+	private String country;
 }

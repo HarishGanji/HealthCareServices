@@ -23,4 +23,5 @@ public class AdminController {
 	public ResponseEntity<String> deleteDoc(@PathVariable UUID doctorId) {
 		return new ResponseEntity<>(adminServ.deleteDoctorById(doctorId), HttpStatus.OK);
 	}
+	
 }
