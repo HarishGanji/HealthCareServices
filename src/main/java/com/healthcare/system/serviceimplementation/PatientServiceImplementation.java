@@ -21,15 +21,11 @@ public class PatientServiceImplementation implements PatientService {
 	@Autowired
 	UserRepository userRepo;
 
-	@Autowired
-	JWTutil jwtUtil;
-
 	@Override
-	public Patient completeProfile(UUID patientId, Patient patient, String token) {
-		String userId = jwtUtil.extractUserId(token);
+	public Patient completeProfile(UUID patientId, Patient patient) {
 		Patient pat = patientRepo.getPatientById(patientId);
-		if (pat.getUser() != null && pat != null && pat.getUser().getUserId().toString().equals(userId)) {
-			User user = pat.getUser();
+		User user = pat.getUser();
+		if (user != null && pat != null) {
 			pat.setPatientName(patient.getPatientName());
 			pat.setAge(patient.getAge());
 			pat.setGender(patient.getGender());

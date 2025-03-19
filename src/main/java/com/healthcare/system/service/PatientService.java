@@ -6,7 +6,7 @@ import com.healthcare.system.models.Patient;
 
 public interface PatientService {
 	
-	Patient completeProfile(UUID patientId, Patient patient, String token);
+	Patient completeProfile(UUID patientId, Patient patient);
 	
 	
 }

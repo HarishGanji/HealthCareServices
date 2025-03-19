@@ -178,7 +178,19 @@ public class UserServiceImplementation implements UserService {
 		response.setEmail(user.getEmail());
 		response.setRole(user.getRole());
 		response.setMessage(message);
-		response.setUUID(user.getRole() + ":" + user.getUserId());
+
+		if (user.getRole().equals(Role.ROLE_PATIENT)) {
+			UUID patId = patientRepo.getPatientByUserId(user.getUserId());
+			response.setUUID(user.getRole() + ":" + patId);
+		}
+		if (user.getRole().equals(Role.ROLE_DOCTOR)) {
+			UUID docId = doctorRepo.getDoctorByUserId(user.getUserId());
+			response.setUUID(user.getRole() + ":" + docId);
+		}
+		if (user.getRole().equals(Role.ROLE_ADMIN)) {
+			UUID adminId = adminRepo.getAdministratorByUserId(user.getUserId());
+			response.setUUID(user.getRole() + ":" + adminId);
+		}
 		return response;
 	}
 
@@ -189,18 +201,4 @@ public class UserServiceImplementation implements UserService {
 		return response;
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }

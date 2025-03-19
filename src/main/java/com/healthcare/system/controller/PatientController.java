@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,20 +21,9 @@ public class PatientController {
 	@Autowired
 	PatientService patientServ;
 
-//	@PostMapping("/profile/{patientId}")
-//	public ResponseEntity<Patient> completeProfile(@PathVariable UUID patientId, @RequestBody Patient pat) {
-//		return new ResponseEntity<>(patientServ.completeProfile(patientId, pat), HttpStatus.OK);
-//	}
-	
-	@PostMapping("/patient/complete-profile/{patientId}")
-	public ResponseEntity<Patient> completeProfile(
-	        @PathVariable UUID patientId,
-	        @RequestBody Patient patient,
-	        @RequestHeader("Authorization") String authHeader) {
-	    
-	    String token = authHeader.substring(7); // Remove "Bearer " prefix
-	    Patient updatedPatient = patientServ.completeProfile(patientId, patient, token);
-	    return ResponseEntity.ok(updatedPatient);
+	@PostMapping("/profile/{patientId}")
+	public ResponseEntity<Patient> completeProfile(@PathVariable UUID patientId, @RequestBody Patient pat) {
+		return new ResponseEntity<>(patientServ.completeProfile(patientId, pat), HttpStatus.OK);
 	}
 
 }

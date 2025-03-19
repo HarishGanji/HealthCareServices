@@ -14,4 +14,8 @@ public interface PatientRepository extends JpaRepository<Patient, UUID> {
 
 	@Query("SELECT p FROM Patient p WHERE p.patientId =:patientId")
 	Patient getPatientById(@Param("patientId") UUID patientId);
+	
+	@Query(value = "SELECT patient_id FROM patient WHERE user_id = :userId", nativeQuery = true)
+	UUID getPatientByUserId(@Param("userId") UUID userId);
+
 }

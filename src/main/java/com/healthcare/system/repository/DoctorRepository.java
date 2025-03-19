@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.healthcare.system.models.Doctor;
+import com.healthcare.system.models.Patient;
 
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, UUID> {
@@ -19,5 +20,8 @@ public interface DoctorRepository extends JpaRepository<Doctor, UUID> {
 	@Modifying
 	@Query("DELETE FROM Doctor d WHERE d.doctorId = :doctorId")
 	int deleteDoctorById(@Param("doctorId") UUID doctorId);
+	
+	@Query(value = "SELECT doctor_id FROM doctor WHERE user_id = :userId", nativeQuery = true)
+	UUID getDoctorByUserId(@Param("userId") UUID userId);
 
 }
