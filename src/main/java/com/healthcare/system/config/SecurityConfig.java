@@ -35,6 +35,7 @@ public class SecurityConfig {
 						.permitAll().requestMatchers("/user/**").permitAll().requestMatchers("/admin/**").permitAll()
 						.requestMatchers("/doctor/**").permitAll().requestMatchers("/patient/**").permitAll()
 						.requestMatchers("/address/**").permitAll()
+						.requestMatchers("/appointment/**").permitAll()
 						.anyRequest().authenticated())
 				.sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

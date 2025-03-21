@@ -1,8 +1,8 @@
 package com.healthcare.system.enums;
 
 public enum Status {
-	SCHEDULED, // Appointment is scheduled
-	COMPLETED, // Appointment is successfully completed
+	ACCEPTED, // Appointment is scheduled
+	PENDING, 
 	CANCELLED, // Appointment was cancelled
 	RESCHEDULED
 }

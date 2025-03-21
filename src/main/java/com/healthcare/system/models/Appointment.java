@@ -1,6 +1,5 @@
 package com.healthcare.system.models;
 
-import java.io.ObjectInputFilter.Status;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -8,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.healthcare.system.enums.Status;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

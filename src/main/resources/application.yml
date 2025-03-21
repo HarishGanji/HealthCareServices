@@ -7,7 +7,7 @@ spring:
 #    web-application-type: servlet
 #    allow-bean-definition-overriding: true  # ✅ Added this line to allow bean overriding
   datasource:
-    url: jdbc:postgresql://localhost:5432/NewHealthCareSystem?createDatabaseIfNotExist=true
+    url: jdbc:postgresql://localhost:5432/HealthCareSystem?createDatabaseIfNotExist=true
     username: postgres
     password: 1234
     driver-class-name: org.postgresql.Driver
