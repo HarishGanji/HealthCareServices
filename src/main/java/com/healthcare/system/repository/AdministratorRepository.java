@@ -8,10 +8,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.healthcare.system.models.Administrator;
+import com.healthcare.system.models.Patient;
 
 @Repository
 public interface AdministratorRepository extends JpaRepository<Administrator, UUID> {
 
+	@Query("SELECT a FROM Administrator a WHERE a.adminId =:adminId")
+	Administrator getAdminById(@Param("adminId") UUID adminId);
 	
 	@Query(value = "SELECT admin_id FROM Administrator WHERE user_id = :userId", nativeQuery = true)
 	UUID getAdministratorByUserId(@Param("userId") UUID userId);

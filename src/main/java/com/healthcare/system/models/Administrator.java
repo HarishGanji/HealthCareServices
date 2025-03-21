@@ -32,12 +32,22 @@ public class Administrator {
 	private String phoneNumber;
 
 	private String email;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "patient_id")
+	@JsonIgnore
+    private Patient patient;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "doctor_id")
+	@JsonIgnore
+    private Doctor doctor;
+	
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "department_id")
 	private Department department;
-
+	
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
  	@JoinColumn(name = "user_id", nullable = false)
 	@JsonIgnore
@@ -45,5 +55,6 @@ public class Administrator {
 
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "address_id")
+	@JsonIgnore
 	private Address address;
 }

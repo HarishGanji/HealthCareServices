@@ -23,15 +23,12 @@ public class AddressController {
 	@Autowired
 	AddressService addServ;
 
-	@PostMapping("/address/{patientId}")
-	public ResponseEntity<Address> addAddressToPatient(@PathVariable UUID patientId, @RequestBody Address add) {
-		return new ResponseEntity<>(addServ.addAddress(patientId, add), HttpStatus.OK);
+	@PostMapping("/address/{entityId}")
+	public ResponseEntity<AddressDTO> addAddressToPatient(@PathVariable UUID entityId, @RequestBody Address add, String role) {
+		return new ResponseEntity<>(addServ.addAddress(entityId, add, role),HttpStatus.OK);
 	}
 
-	@GetMapping("/address/{patientId}")
-	public ResponseEntity<AddressDTO> getAddress(@PathVariable UUID patientId) {
-		return new ResponseEntity<>(addServ.getAddressByPatientId(patientId), HttpStatus.OK);
-	}
+
 //    @PreAuthorize("hasAnyRole('PATIENT', 'DOCTOR', 'ADMIN')")  // Role-based access
 
 }

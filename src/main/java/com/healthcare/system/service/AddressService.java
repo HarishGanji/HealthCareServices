@@ -7,8 +7,7 @@ import com.healthcare.system.models.Address;
 
 public interface AddressService {
 	
-	Address addAddress(UUID patientId, Address address);
-	
-	AddressDTO getAddressByPatientId(UUID patientId);
-	
+//	Address addAddress(UUID patientId, Address address);
+		
+	AddressDTO addAddress(UUID entityId, Address address, String entityType);
 }
