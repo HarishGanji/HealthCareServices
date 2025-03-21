@@ -1,5 +1,6 @@
 package com.healthcare.system.serviceimplementation;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class DoctorServiceImplementation implements DoctorService {
 	public Doctor addOrEditSpecialization(UUID doctorId, Doctor doctor) {
 		Doctor doc = doctorRepo.getDoctorById(doctorId);
 		if (doc != null) {
-			doc.setSpecialization(doctor.getSpecialization());
+			doc.setSpecialization(doctor.getSpecialization().toLowerCase());
 		}
 		return doctorRepo.save(doc);
 	}
@@ -58,5 +59,10 @@ public class DoctorServiceImplementation implements DoctorService {
 			throw new RuntimeException("User NOT Found");
 		}
 
+	}
+
+	@Override
+	public List<Doctor> getDoctorsBySpecialization(String specialization) {
+		return doctorRepo.doctorsBySpecialization(specialization);
 	}
 }

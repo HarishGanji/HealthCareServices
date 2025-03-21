@@ -1,5 +1,6 @@
 package com.healthcare.system.service;
 
+import java.util.List;
 import java.util.UUID;
 
 import com.healthcare.system.dtos.AddressDTO;
@@ -13,4 +14,5 @@ public interface DoctorService {
 
 	Doctor completeProfile(UUID doctorId, Doctor doctor);
 
+	List<Doctor> getDoctorsBySpecialization(String specialization);
 }

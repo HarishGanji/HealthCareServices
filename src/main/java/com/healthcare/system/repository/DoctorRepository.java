@@ -1,5 +1,6 @@
 package com.healthcare.system.repository;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,8 +21,10 @@ public interface DoctorRepository extends JpaRepository<Doctor, UUID> {
 	@Modifying
 	@Query("DELETE FROM Doctor d WHERE d.doctorId = :doctorId")
 	int deleteDoctorById(@Param("doctorId") UUID doctorId);
-	
+
 	@Query(value = "SELECT doctor_id FROM doctor WHERE user_id = :userId", nativeQuery = true)
 	UUID getDoctorByUserId(@Param("userId") UUID userId);
 
+	@Query("SELECT d FROM Doctor d WHERE d.specialization =:specialization")
+	List<Doctor> doctorsBySpecialization(String specialization);
 }
