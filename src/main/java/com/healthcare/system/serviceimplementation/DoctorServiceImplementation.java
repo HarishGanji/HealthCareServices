@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.healthcare.system.dtos.AddressDTO;
+import com.healthcare.system.models.Appointment;
 import com.healthcare.system.models.Doctor;
 import com.healthcare.system.models.Patient;
 import com.healthcare.system.models.User;
 import com.healthcare.system.repository.AddressRepository;
+import com.healthcare.system.repository.AppointmentRepository;
 import com.healthcare.system.repository.DoctorRepository;
 import com.healthcare.system.service.DoctorService;
 
@@ -22,6 +24,9 @@ public class DoctorServiceImplementation implements DoctorService {
 
 	@Autowired
 	AddressRepository addressRepo;
+	
+	@Autowired
+	AppointmentRepository appointmentRepo;
 	
 	@Override
 	public Doctor addOrEditSpecialization(UUID doctorId, Doctor doctor) {
@@ -65,4 +70,11 @@ public class DoctorServiceImplementation implements DoctorService {
 	public List<Doctor> getDoctorsBySpecialization(String specialization) {
 		return doctorRepo.doctorsBySpecialization(specialization);
 	}
+
+	@Override
+	public List<Appointment> viewAllAppointmentsByDoctorId(UUID doctorId) {
+		return appointmentRepo.viewAllAppointments(doctorId);
+	}
+	
+	
 }

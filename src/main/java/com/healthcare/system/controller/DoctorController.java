@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.healthcare.system.dtos.AddressDTO;
+import com.healthcare.system.models.Appointment;
 import com.healthcare.system.models.Doctor;
 import com.healthcare.system.models.Patient;
 import com.healthcare.system.service.DoctorService;
@@ -44,5 +45,10 @@ public class DoctorController {
 	@GetMapping("/doctors/specialization")
 	public ResponseEntity<List<Doctor>> getDoctorsBySpecialization(@RequestParam String specialization){
 		return new ResponseEntity<>(doctorServ.getDoctorsBySpecialization(specialization),HttpStatus.OK);
+	}
+	
+	@GetMapping("/appointments/{doctorId}")
+	public ResponseEntity<List<Appointment>> viewAllAppointments(@PathVariable UUID doctorId){
+		return new ResponseEntity<>(doctorServ.viewAllAppointmentsByDoctorId(doctorId),HttpStatus.OK);
 	}
 }
