@@ -201,4 +201,13 @@ public class UserServiceImplementation implements UserService {
 		return response;
 	}
 
+	@Override
+	public void resetPassword(String email, String newPassword) {
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepo.save(user);
+    }
+
 }

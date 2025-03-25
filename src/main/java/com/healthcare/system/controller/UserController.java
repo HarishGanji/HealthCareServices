@@ -34,5 +34,13 @@ public class UserController {
         AuthResponse response = userService.login(loginRequest);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
+    
+    
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestParam String email, 
+                                                @RequestParam String newPassword) {
+        userService.resetPassword(email, newPassword);
+        return ResponseEntity.ok("Password reset successful!");
+    }
 }
 
