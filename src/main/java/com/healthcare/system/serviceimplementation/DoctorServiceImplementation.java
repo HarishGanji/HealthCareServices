@@ -24,10 +24,10 @@ public class DoctorServiceImplementation implements DoctorService {
 
 	@Autowired
 	AddressRepository addressRepo;
-	
+
 	@Autowired
 	AppointmentRepository appointmentRepo;
-	
+
 	@Override
 	public Doctor addOrEditSpecialization(UUID doctorId, Doctor doctor) {
 		Doctor doc = doctorRepo.getDoctorById(doctorId);
@@ -46,7 +46,7 @@ public class DoctorServiceImplementation implements DoctorService {
 						.orElseThrow(() -> new IllegalArgumentException("Address not found")))
 				.orElseThrow(() -> new IllegalArgumentException("Doctor not found"));
 	}
-	
+
 	@Override
 	public Doctor completeProfile(UUID doctorId, Doctor doctor) {
 		Doctor doc = doctorRepo.getDoctorById(doctorId);
@@ -75,6 +75,5 @@ public class DoctorServiceImplementation implements DoctorService {
 	public List<Appointment> viewAllAppointmentsByDoctorId(UUID doctorId) {
 		return appointmentRepo.viewAllAppointments(doctorId);
 	}
-	
-	
+
 }

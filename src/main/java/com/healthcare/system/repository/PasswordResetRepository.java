@@ -15,4 +15,7 @@ public interface PasswordResetRepository extends JpaRepository<PasswordResetOTP,
 	
 	void deleteByEmail(String email);
 
+//	@Query("SELECT p FROM PasswordResetOTP p WHERE p.email = :email ORDER BY p.expiryTime DESC LIMIT 1")
+//	Optional<PasswordResetOTP> findLatestOTPByEmail(@Param("email") String email);
+
 }
