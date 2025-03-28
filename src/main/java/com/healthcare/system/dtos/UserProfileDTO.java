@@ -1,5 +1,6 @@
 package com.healthcare.system.dtos;
 
+import java.util.UUID;
 
 import com.healthcare.system.enums.Role;
 
@@ -10,13 +11,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class AuthResponse {
-	private String token;
-	private String email;
+@NoArgsConstructor
+public class UserProfileDTO {
+
+	private UUID uuid;
 	@Enumerated(EnumType.STRING)
 	private Role role;
-	private int statusCode;
-	private String message;
 }

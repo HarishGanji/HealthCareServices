@@ -2,11 +2,14 @@ package com.healthcare.system.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import com.healthcare.system.dtos.AuthRequest;
 import com.healthcare.system.dtos.AuthResponse;
 import com.healthcare.system.dtos.RegisterDTO;
+import com.healthcare.system.dtos.UserProfileDTO;
 import com.healthcare.system.models.User;
 import com.healthcare.system.service.UserService;
 
@@ -41,6 +44,12 @@ public class UserController {
                                                 @RequestParam String newPassword) {
         userService.resetPassword(email, newPassword);
         return ResponseEntity.ok("Password reset successful!");
+    }
+    
+    @GetMapping("/role-based-user")
+    public ResponseEntity<UserProfileDTO> getUserProfile(@RequestParam String email) {
+        UserProfileDTO profileDTO = userService.getUserProfile(email);
+        return ResponseEntity.ok(profileDTO);
     }
 }
 

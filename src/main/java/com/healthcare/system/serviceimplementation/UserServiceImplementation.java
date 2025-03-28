@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.healthcare.system.dtos.AuthRequest;
 import com.healthcare.system.dtos.AuthResponse;
 import com.healthcare.system.dtos.RegisterDTO;
+import com.healthcare.system.dtos.UserProfileDTO;
 import com.healthcare.system.enums.Role;
 import com.healthcare.system.models.Address;
 import com.healthcare.system.models.Administrator;
@@ -178,19 +179,6 @@ public class UserServiceImplementation implements UserService {
 		response.setEmail(user.getEmail());
 		response.setRole(user.getRole());
 		response.setMessage(message);
-
-		if (user.getRole().equals(Role.PATIENT)) {
-			UUID patId = patientRepo.getPatientByUserId(user.getUserId());
-			response.setUUID(user.getRole() + ":" + patId);
-		}
-		if (user.getRole().equals(Role.DOCTOR)) {
-			UUID docId = doctorRepo.getDoctorByUserId(user.getUserId());
-			response.setUUID(user.getRole() + ":" + docId);
-		}
-		if (user.getRole().equals(Role.ADMIN)) {
-			UUID adminId = adminRepo.getAdministratorByUserId(user.getUserId());
-			response.setUUID(user.getRole() + ":" + adminId);
-		}
 		return response;
 	}
 
@@ -203,11 +191,34 @@ public class UserServiceImplementation implements UserService {
 
 	@Override
 	public void resetPassword(String email, String newPassword) {
-        User user = userRepo.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+		User user = userRepo.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
 
-        user.setPassword(passwordEncoder.encode(newPassword));
-        userRepo.save(user);
-    }
+		user.setPassword(passwordEncoder.encode(newPassword));
+		userRepo.save(user);
+	}
+
+	@Override
+	public UserProfileDTO getUserProfile(String email) {
+		// Fetch user from DB using email
+		User user = userRepo.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+		// Fetch UUID based on role
+		UUID userUUID = fetchUserUUID(user);
+		UserProfileDTO us = new UserProfileDTO();
+		us.setRole(user.getRole());
+		us.setUuid(userUUID);
+		return us;
+	}
+
+	private UUID fetchUserUUID(User user) {
+		// Assuming a patient has a UUID in a separate table
+		if (user.getRole() == Role.PATIENT) {
+			return user.getUserId(); // Adjust based on your entity structure
+		} else if (user.getRole() == Role.ADMIN) {
+			return user.getUserId();
+		} else if (user.getRole() == Role.DOCTOR) {
+			return user.getUserId();
+		}
+		return null; // Handle other roles if needed
+	}
 
 }
