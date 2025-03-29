@@ -13,7 +13,6 @@ import com.healthcare.system.dtos.AuthResponse;
 import com.healthcare.system.dtos.RegisterDTO;
 import com.healthcare.system.dtos.UserProfileDTO;
 import com.healthcare.system.enums.Role;
-import com.healthcare.system.models.Address;
 import com.healthcare.system.models.Administrator;
 import com.healthcare.system.models.Doctor;
 import com.healthcare.system.models.Patient;
@@ -25,7 +24,6 @@ import com.healthcare.system.repository.UserRepository;
 import com.healthcare.system.security.JWTutil;
 import com.healthcare.system.service.UserService;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -52,13 +50,10 @@ public class UserServiceImplementation implements UserService {
 		try {
 			authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
-
 			User user = userRepo.findByEmail(loginRequest.getEmail())
 					.orElseThrow(() -> new IllegalStateException("User not found after authentication"));
-
 			String token = jwtUtils.generateToken(user);
 			return buildSuccessResponse(user, token, "Login Success", 200);
-
 		} catch (AuthenticationException e) {
 			return buildErrorResponse(401, "Invalid credentials");
 		} catch (Exception e) {
@@ -73,12 +68,9 @@ public class UserServiceImplementation implements UserService {
 			validateEmailUniqueness(registerDTO.getEmail());
 			User user = createUserFromDTO(registerDTO);
 			User savedUser = userRepo.save(user);
-
 			createRoleSpecificEntity(savedUser, registerDTO);
 			String token = jwtUtils.generateToken(savedUser);
-
 			return buildSuccessResponse(savedUser, token, "User registered successfully!", 200);
-
 		} catch (IllegalArgumentException e) {
 			return buildErrorResponse(400, e.getMessage());
 		} catch (Exception e) {
@@ -102,17 +94,6 @@ public class UserServiceImplementation implements UserService {
 		return user;
 	}
 
-//	private Address createAddressFromDTO(RegisterDTO dto) {
-//		if (dto.getAddress() == null)
-//			return null;
-//		Address address = new Address();
-//		address.setStreet(dto.getAddress().getStreet());
-//		address.setCity(dto.getAddress().getCity());
-//		address.setState(dto.getAddress().getState());
-//		address.setZipCode(dto.getAddress().getZipcode());
-//		return address;
-//	}
-
 	private void createRoleSpecificEntity(User user, RegisterDTO dto) {
 		switch (user.getRole()) {
 		case DOCTOR:
@@ -132,24 +113,18 @@ public class UserServiceImplementation implements UserService {
 	private Doctor createDoctor(User user, RegisterDTO dto) {
 		Doctor doctor = new Doctor();
 		populateCommonFields(doctor, user);
-//		doctor.setAddress(null);
 		return doctor;
 	}
 
 	private Administrator createAdministrator(User user, RegisterDTO dto) {
 		Administrator admin = new Administrator();
 		populateCommonFields(admin, user);
-//		admin.setAddress(null);
 		return admin;
 	}
 
 	private Patient createPatient(User user, RegisterDTO dto) {
-//		if (dto.getAddress() == null) {
-//			throw new IllegalArgumentException("Address is required for patient registration");
-//		}
 		Patient patient = new Patient();
 		populateCommonFields(patient, user);
-//		patient.setAddress(null);
 		return patient;
 	}
 
@@ -192,16 +167,13 @@ public class UserServiceImplementation implements UserService {
 	@Override
 	public void resetPassword(String email, String newPassword) {
 		User user = userRepo.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
-
 		user.setPassword(passwordEncoder.encode(newPassword));
 		userRepo.save(user);
 	}
 
 	@Override
 	public UserProfileDTO getUserProfile(String email) {
-		// Fetch user from DB using email
 		User user = userRepo.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
-		// Fetch UUID based on role
 		UUID userUUID = fetchUserUUID(user);
 		UserProfileDTO us = new UserProfileDTO();
 		us.setRole(user.getRole());
@@ -210,15 +182,14 @@ public class UserServiceImplementation implements UserService {
 	}
 
 	private UUID fetchUserUUID(User user) {
-		// Assuming a patient has a UUID in a separate table
 		if (user.getRole() == Role.PATIENT) {
-			return user.getUserId(); // Adjust based on your entity structure
+			return patientRepo.getPatientByUserId(user.getUserId()); 
 		} else if (user.getRole() == Role.ADMIN) {
-			return user.getUserId();
+			return adminRepo.getAdministratorByUserId(user.getUserId());
 		} else if (user.getRole() == Role.DOCTOR) {
-			return user.getUserId();
+			return doctorRepo.getDoctorByUserId(user.getUserId());
 		}
-		return null; // Handle other roles if needed
+		return null; 
 	}
 
 }

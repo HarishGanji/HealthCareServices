@@ -7,12 +7,15 @@ import org.springframework.stereotype.Service;
 
 import com.healthcare.system.dtos.AddressDTO;
 import com.healthcare.system.models.Administrator;
+import com.healthcare.system.models.Department;
 import com.healthcare.system.models.Doctor;
 import com.healthcare.system.models.Patient;
 import com.healthcare.system.models.User;
 import com.healthcare.system.repository.AddressRepository;
 import com.healthcare.system.repository.AdministratorRepository;
+import com.healthcare.system.repository.DepartmentRepository;
 import com.healthcare.system.repository.DoctorRepository;
+import com.healthcare.system.repository.UserRepository;
 import com.healthcare.system.service.AdminService;
 
 import jakarta.transaction.Transactional;
@@ -28,17 +31,29 @@ public class AdminServiceImplementation implements AdminService {
 
 	@Autowired
 	AddressRepository addressRepo;
-	
+
+	@Autowired
+	UserRepository userRepo;
+
+	@Autowired
+	DepartmentRepository depRepo;
+
 	@Transactional
 	@Override
 	public String deleteDoctorById(UUID doctorId) {
 		Doctor doc = doctorRepo.getDoctorById(doctorId);
-		if (doc != null) {
-			doctorRepo.delete(doc);
-		} else {
-			return "Not Deleted";
+		if (doc == null) {
+			throw new RuntimeException("Doctor not found");
 		}
-		return "successfully deleted";
+		Department depart = depRepo.getDepartmentById(doc.getDepartment().getDepartmentId());
+		depart.setHeadDoctor(null);// removing dependency
+		User us = userRepo.getUserById(doc.getUser().getUserId());
+		if (us == null) {
+			throw new RuntimeException("User is not found");
+		}
+		doctorRepo.delete(doc);
+		userRepo.delete(us);
+		return "Successfully Deleted";
 	}
 
 	@Override
@@ -68,6 +83,5 @@ public class AdminServiceImplementation implements AdminService {
 						.orElseThrow(() -> new IllegalArgumentException("Address not found")))
 				.orElseThrow(() -> new IllegalArgumentException("Admin not found"));
 	}
-	
-	
+
 }
