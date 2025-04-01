@@ -1,0 +1,42 @@
+server:
+  port: 8080  # Render automatically assigns a port, so use 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://dpg-cvloks2dbo4c738672d0-a:5432/healthservices
+    username: healthservices_user
+    password: tJVI0c5bHoF8LeOgXSRrr04ABnuna96j
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ganjiharish9662@gmail.com
+    password: iyrw ojac qaee dtua
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
