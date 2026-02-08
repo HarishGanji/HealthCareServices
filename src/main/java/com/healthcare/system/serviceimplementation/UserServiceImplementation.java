@@ -72,8 +72,7 @@ public class UserServiceImplementation implements UserService {
 			User user = createUserFromDTO(registerDTO);
 			User savedUser = userRepo.save(user);
 			createRoleSpecificEntity(savedUser, registerDTO);
-			String token = jwtUtils.generateToken(savedUser);
-			return buildSuccessResponse(savedUser, token, "User registered successfully!", 200);
+			return buildSuccessResponse(savedUser, null, "User registered successfully!", 200);
 		} catch (IllegalArgumentException e) {
 			return buildErrorResponse(400, e.getMessage());
 		} catch (Exception e) {
