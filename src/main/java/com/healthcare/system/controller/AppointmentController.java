@@ -1,11 +1,15 @@
 package com.healthcare.system.controller;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,8 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.healthcare.system.dtos.AppointmentDTO;
+import com.healthcare.system.enums.Status;
 import com.healthcare.system.service.AppointmentService;
 
+/**
+ * Appointment lifecycle endpoints for booking, viewing, and updating appointments.
+ */
 @RestController
 @RequestMapping("/appointment")
 public class AppointmentController {
@@ -22,6 +30,7 @@ public class AppointmentController {
 	@Autowired
 	AppointmentService appointServ;
 
+	@PreAuthorize("hasAnyAuthority('PATIENT', 'ADMIN')")
 	@PostMapping("/appointment/{patientId}/{doctorId}")
 	public ResponseEntity<AppointmentDTO> bookAppointment(@PathVariable UUID patientId, @PathVariable UUID doctorId,
 			@RequestParam LocalDateTime appointmentDateTime) {
@@ -29,4 +38,48 @@ public class AppointmentController {
 				HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasAuthority('ADMIN')")
+	@GetMapping
+	public ResponseEntity<List<AppointmentDTO>> getAllAppointments() {
+		return new ResponseEntity<>(appointServ.getAllAppointments(), HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasAuthority('ADMIN')")
+	@GetMapping("/{appointmentId}")
+	public ResponseEntity<AppointmentDTO> getAppointment(@PathVariable UUID appointmentId) {
+		return new ResponseEntity<>(appointServ.getAppointmentById(appointmentId), HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasAnyAuthority('PATIENT', 'ADMIN')")
+	@GetMapping("/patient/{patientId}")
+	public ResponseEntity<List<AppointmentDTO>> getAppointmentsByPatient(@PathVariable UUID patientId) {
+		return new ResponseEntity<>(appointServ.getAppointmentsByPatientId(patientId), HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasAnyAuthority('DOCTOR', 'ADMIN')")
+	@GetMapping("/doctor/{doctorId}")
+	public ResponseEntity<List<AppointmentDTO>> getAppointmentsByDoctor(@PathVariable UUID doctorId) {
+		return new ResponseEntity<>(appointServ.getAppointmentsByDoctorId(doctorId), HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasAnyAuthority('PATIENT', 'ADMIN')")
+	@PatchMapping("/{appointmentId}/cancel")
+	public ResponseEntity<AppointmentDTO> cancelAppointment(@PathVariable UUID appointmentId) {
+		return new ResponseEntity<>(appointServ.cancelAppointment(appointmentId), HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasAnyAuthority('PATIENT', 'ADMIN')")
+	@PatchMapping("/{appointmentId}/reschedule")
+	public ResponseEntity<AppointmentDTO> rescheduleAppointment(@PathVariable UUID appointmentId,
+			@RequestParam LocalDateTime appointmentDateTime) {
+		return new ResponseEntity<>(appointServ.rescheduleAppointment(appointmentId, appointmentDateTime),
+				HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasAnyAuthority('DOCTOR', 'ADMIN')")
+	@PatchMapping("/{appointmentId}/status")
+	public ResponseEntity<AppointmentDTO> updateAppointmentStatus(@PathVariable UUID appointmentId,
+			@RequestParam Status status) {
+		return new ResponseEntity<>(appointServ.updateAppointmentStatus(appointmentId, status), HttpStatus.OK);
+	}
 }

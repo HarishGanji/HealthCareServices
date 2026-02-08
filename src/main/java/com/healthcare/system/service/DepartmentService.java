@@ -6,6 +6,9 @@ import java.util.UUID;
 import com.healthcare.system.dtos.DepartmentDTO;
 import com.healthcare.system.models.Department;
 
+/**
+ * Service contract for department creation and assignments.
+ */
 public interface DepartmentService {
 
 	DepartmentDTO createDepartment(Department department);

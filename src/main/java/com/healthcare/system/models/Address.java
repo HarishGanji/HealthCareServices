@@ -13,6 +13,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Address entity shared by patient, doctor, and administrator profiles.
+ * The owning side of the relationship lives on the profile entity.
+ */
 @Entity
 @Data
 @NoArgsConstructor
@@ -40,4 +44,8 @@ public class Address {
 	@OneToOne(mappedBy = "address")
 	@JsonIgnore
 	private Patient patient;
+
+	@OneToOne(mappedBy = "address")
+	@JsonIgnore
+	private Administrator administrator;
 }

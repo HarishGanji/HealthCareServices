@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.*;
 
 import com.healthcare.system.service.OTPService;
 
+/**
+ * OTP endpoints for password reset verification.
+ */
 @RestController
 @RequestMapping("/auth")
 public class OTPController {

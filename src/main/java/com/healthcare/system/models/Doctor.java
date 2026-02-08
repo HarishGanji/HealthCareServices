@@ -19,8 +19,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-//Doctor:
-//Attributes: doctorID (Primary Key), name, specialization, contactDetails
+/**
+ * Doctor profile entity that is linked to a {@link User} account and a department.
+ * Doctors own appointments, availability slots, and prescriptions.
+ */
 @Entity
 @Data
 @NoArgsConstructor

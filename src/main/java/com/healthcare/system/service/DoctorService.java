@@ -7,6 +7,9 @@ import com.healthcare.system.dtos.AddressDTO;
 import com.healthcare.system.models.Appointment;
 import com.healthcare.system.models.Doctor;
 
+/**
+ * Service contract for doctor profile and appointment-related queries.
+ */
 public interface DoctorService {
 
 	Doctor addOrEditSpecialization(UUID doctorId, Doctor doctor);

@@ -16,6 +16,9 @@ import com.healthcare.system.repository.DoctorRepository;
 import com.healthcare.system.repository.PatientRepository;
 import com.healthcare.system.service.AddressService;
 
+/**
+ * Address service implementation that attaches addresses to patient, doctor, or admin profiles.
+ */
 @Service
 public class AddressServiceImplementation implements AddressService {
 
@@ -66,6 +69,7 @@ public class AddressServiceImplementation implements AddressService {
 			ad.setState(address.getState());
 			ad.setStreet(address.getStreet());
 			ad.setZipCode(address.getZipCode());
+			ad.setPatient((Patient) obj);
 			((Patient) obj).setAddress(ad);
 			return convertToAddressDto(addressRepo.save(ad));
 		}else if(obj instanceof Administrator) {
@@ -75,6 +79,7 @@ public class AddressServiceImplementation implements AddressService {
 			ad.setState(address.getState());
 			ad.setStreet(address.getStreet());
 			ad.setZipCode(address.getZipCode());
+			ad.setAdministrator((Administrator) obj);
 			((Administrator) obj).setAddress(ad);
 			return convertToAddressDto(addressRepo.save(ad));
 		}else if(obj instanceof Doctor) {
@@ -84,6 +89,7 @@ public class AddressServiceImplementation implements AddressService {
 			ad.setState(address.getState());
 			ad.setStreet(address.getStreet());
 			ad.setZipCode(address.getZipCode());
+			ad.setDoctor((Doctor) obj);
 			((Doctor) obj).setAddress(ad);
 			return convertToAddressDto(addressRepo.save(ad));
 		}

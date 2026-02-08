@@ -5,6 +5,9 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * One-time password entity used for password reset flows.
+ */
 @Entity
 @Data
 @NoArgsConstructor
