@@ -18,6 +18,7 @@ public class OpenApiConfig {
 
 	@Bean
 	public OpenAPI customOpenAPI() {
+		 System.out.println(">>> OpenAPI CONFIG LOADED <<<");
 		return new OpenAPI()
 				.info(new Info()
 						.title("HealthCare Services API")
