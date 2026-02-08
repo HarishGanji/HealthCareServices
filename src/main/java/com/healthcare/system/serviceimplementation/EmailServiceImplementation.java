@@ -6,6 +6,9 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import com.healthcare.system.service.EmailService;
 
+/**
+ * Email service implementation backed by Spring's {@link JavaMailSender}.
+ */
 @Service
 public class EmailServiceImplementation implements EmailService {
 

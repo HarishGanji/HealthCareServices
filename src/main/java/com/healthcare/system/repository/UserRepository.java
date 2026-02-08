@@ -10,6 +10,9 @@ import org.springframework.stereotype.Repository;
 
 import com.healthcare.system.models.User;
 
+/**
+ * Repository for user entities used in authentication and profile lookup.
+ */
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
 

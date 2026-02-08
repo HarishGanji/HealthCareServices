@@ -13,6 +13,9 @@ import com.healthcare.system.repository.PatientRepository;
 import com.healthcare.system.repository.UserRepository;
 import com.healthcare.system.service.PatientService;
 
+/**
+ * Patient service implementation for profile completion and lookups.
+ */
 @Service
 public class PatientServiceImplementation implements PatientService {
 

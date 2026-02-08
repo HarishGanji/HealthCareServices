@@ -16,6 +16,9 @@ import com.healthcare.system.repository.AppointmentRepository;
 import com.healthcare.system.repository.DoctorRepository;
 import com.healthcare.system.service.DoctorService;
 
+/**
+ * Doctor service implementation for profile completion and lookups.
+ */
 @Service
 public class DoctorServiceImplementation implements DoctorService {
 
@@ -73,7 +76,7 @@ public class DoctorServiceImplementation implements DoctorService {
 
 	@Override
 	public List<Appointment> viewAllAppointmentsByDoctorId(UUID doctorId) {
-		return appointmentRepo.viewAllAppointments(doctorId);
+		return appointmentRepo.findByDoctorDoctorId(doctorId);
 	}
 
 }

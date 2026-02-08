@@ -19,6 +19,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Patient profile entity linked to a {@link User} account and a home address.
+ * Patients own appointments and receive prescriptions.
+ */
 @Entity
 @Data
 @NoArgsConstructor

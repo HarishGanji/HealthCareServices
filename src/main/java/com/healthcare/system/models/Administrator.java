@@ -17,6 +17,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Administrator profile entity that links to a system {@link User} and optionally a department.
+ * Administrators manage users, departments, and system-wide configuration.
+ */
 @Entity
 @Data
 @NoArgsConstructor
@@ -32,17 +36,7 @@ public class Administrator {
 	private String phoneNumber;
 
 	private String email;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "patient_id")
-	@JsonIgnore
-    private Patient patient;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "doctor_id")
-	@JsonIgnore
-    private Doctor doctor;
-	
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "department_id")

@@ -20,6 +20,9 @@ import com.healthcare.system.service.AdminService;
 
 import jakarta.transaction.Transactional;
 
+/**
+ * Admin service implementation for administrative workflows.
+ */
 @Service
 public class AdminServiceImplementation implements AdminService {
 
