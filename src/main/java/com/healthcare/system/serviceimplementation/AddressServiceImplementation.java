@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.healthcare.system.dtos.AddressDTO;
+import com.healthcare.system.exception.ResourceNotFoundException;
 import com.healthcare.system.models.Address;
 import com.healthcare.system.models.Administrator;
 import com.healthcare.system.models.Doctor;
@@ -60,7 +61,7 @@ public class AddressServiceImplementation implements AddressService {
 	public AddressDTO addAddress(UUID entityId, Address address, String entityType) {
 		Object obj = getObjectById(entityId, entityType);
 		if(obj == null) {
-			throw new IllegalArgumentException("Not found");
+			throw new ResourceNotFoundException("Entity not found");
 		}
 		if(obj instanceof Patient) {
 			Address ad = new Address();
@@ -94,7 +95,7 @@ public class AddressServiceImplementation implements AddressService {
 			return convertToAddressDto(addressRepo.save(ad));
 		}
 		else {
-			throw new IllegalArgumentException("Not found");
+			throw new ResourceNotFoundException("Entity not found");
 		}
 	}
 

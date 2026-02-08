@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.healthcare.system.dtos.AddressDTO;
+import com.healthcare.system.exception.ResourceNotFoundException;
 import com.healthcare.system.models.Administrator;
 import com.healthcare.system.models.Department;
 import com.healthcare.system.models.Doctor;
@@ -46,13 +47,13 @@ public class AdminServiceImplementation implements AdminService {
 	public String deleteDoctorById(UUID doctorId) {
 		Doctor doc = doctorRepo.getDoctorById(doctorId);
 		if (doc == null) {
-			throw new RuntimeException("Doctor not found");
+			throw new ResourceNotFoundException("Doctor not found");
 		}
 		Department depart = depRepo.getDepartmentById(doc.getDepartment().getDepartmentId());
 		depart.setHeadDoctor(null);// removing dependency
 		User us = userRepo.getUserById(doc.getUser().getUserId());
 		if (us == null) {
-			throw new RuntimeException("User is not found");
+			throw new ResourceNotFoundException("User not found");
 		}
 		doctorRepo.delete(doc);
 		userRepo.delete(us);
@@ -72,7 +73,7 @@ public class AdminServiceImplementation implements AdminService {
 			ad.setUser(user);
 			return adminRepo.save(ad);
 		} else {
-			throw new RuntimeException("User NOT Found");
+			throw new ResourceNotFoundException("User not found");
 		}
 
 	}
@@ -83,8 +84,8 @@ public class AdminServiceImplementation implements AdminService {
 				.map(address -> addressRepo.findById(address.getAddressId())
 						.map(addr -> new AddressDTO(addr.getAddressId(), addr.getStreet(), addr.getCity(),
 								addr.getState(), addr.getZipCode(), addr.getCountry()))
-						.orElseThrow(() -> new IllegalArgumentException("Address not found")))
-				.orElseThrow(() -> new IllegalArgumentException("Admin not found"));
+						.orElseThrow(() -> new ResourceNotFoundException("Address not found")))
+				.orElseThrow(() -> new ResourceNotFoundException("Admin not found"));
 	}
 
 }

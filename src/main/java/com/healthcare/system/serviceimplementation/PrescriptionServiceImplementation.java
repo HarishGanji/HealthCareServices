@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.healthcare.system.dtos.PrescriptionDTO;
+import com.healthcare.system.exception.ResourceNotFoundException;
 import com.healthcare.system.models.Doctor;
 import com.healthcare.system.models.Patient;
 import com.healthcare.system.models.Prescription;
@@ -35,11 +36,11 @@ public class PrescriptionServiceImplementation implements PrescriptionService {
 	public PrescriptionDTO createPrescription(UUID doctorId, UUID patientId, PrescriptionDTO prescription) {
 		Doctor doctor = doctorRepository.getDoctorById(doctorId);
 		if (doctor == null) {
-			throw new RuntimeException("Doctor not Found");
+			throw new ResourceNotFoundException("Doctor not found");
 		}
 		Patient patient = patientRepository.getPatientById(patientId);
 		if (patient == null) {
-			throw new RuntimeException("Patient Not Found");
+			throw new ResourceNotFoundException("Patient not found");
 		}
 
 		Prescription entity = new Prescription();
@@ -57,7 +58,7 @@ public class PrescriptionServiceImplementation implements PrescriptionService {
 	public List<PrescriptionDTO> getPrescriptionsByPatient(UUID patientId) {
 		Patient patient = patientRepository.getPatientById(patientId);
 		if (patient == null) {
-			throw new RuntimeException("Patient Not Found");
+			throw new ResourceNotFoundException("Patient not found");
 		}
 		return prescriptionRepository.findByPatientPatientId(patientId).stream()
 				.map(this::toDto)
@@ -68,7 +69,7 @@ public class PrescriptionServiceImplementation implements PrescriptionService {
 	public List<PrescriptionDTO> getPrescriptionsByDoctor(UUID doctorId) {
 		Doctor doctor = doctorRepository.getDoctorById(doctorId);
 		if (doctor == null) {
-			throw new RuntimeException("Doctor not Found");
+			throw new ResourceNotFoundException("Doctor not found");
 		}
 		return prescriptionRepository.findByDoctorDoctorId(doctorId).stream()
 				.map(this::toDto)

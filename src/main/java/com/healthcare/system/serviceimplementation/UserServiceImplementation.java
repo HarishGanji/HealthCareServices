@@ -13,6 +13,7 @@ import com.healthcare.system.dtos.AuthResponse;
 import com.healthcare.system.dtos.RegisterDTO;
 import com.healthcare.system.dtos.UserProfileDTO;
 import com.healthcare.system.enums.Role;
+import com.healthcare.system.exception.ResourceNotFoundException;
 import com.healthcare.system.models.Administrator;
 import com.healthcare.system.models.Doctor;
 import com.healthcare.system.models.Patient;
@@ -168,14 +169,14 @@ public class UserServiceImplementation implements UserService {
 
 	@Override
 	public void resetPassword(String email, String newPassword) {
-		User user = userRepo.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+		User user = userRepo.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User not found"));
 		user.setPassword(passwordEncoder.encode(newPassword));
 		userRepo.save(user);
 	}
 
 	@Override
 	public UserProfileDTO getUserProfile(String email) {
-		User user = userRepo.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+		User user = userRepo.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User not found"));
 		UUID userUUID = fetchUserUUID(user);
 		UserProfileDTO us = new UserProfileDTO();
 		us.setRole(user.getRole());

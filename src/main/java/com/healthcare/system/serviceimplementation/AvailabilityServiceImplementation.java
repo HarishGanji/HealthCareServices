@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.healthcare.system.dtos.AvailabilitySlotDTO;
+import com.healthcare.system.exception.BadRequestException;
+import com.healthcare.system.exception.ConflictException;
+import com.healthcare.system.exception.ResourceNotFoundException;
 import com.healthcare.system.models.AvailabilitySlot;
 import com.healthcare.system.models.Doctor;
 import com.healthcare.system.repository.AvailabilitySlotRepository;
@@ -31,14 +34,14 @@ public class AvailabilityServiceImplementation implements AvailabilityService {
 	public AvailabilitySlotDTO createAvailabilitySlot(UUID doctorId, LocalDateTime startTime, LocalDateTime endTime) {
 		Doctor doctor = doctorRepository.getDoctorById(doctorId);
 		if (doctor == null) {
-			throw new RuntimeException("Doctor not Found");
+			throw new ResourceNotFoundException("Doctor not found");
 		}
 		if (startTime == null || endTime == null || !endTime.isAfter(startTime)) {
-			throw new IllegalArgumentException("Invalid availability window");
+			throw new BadRequestException("Invalid availability window");
 		}
 		boolean overlaps = slotRepository.existsOverlappingSlot(doctor, startTime, endTime);
 		if (overlaps) {
-			throw new RuntimeException("Availability overlaps existing slot");
+			throw new ConflictException("Availability overlaps existing slot");
 		}
 
 		AvailabilitySlot slot = new AvailabilitySlot();
@@ -54,7 +57,7 @@ public class AvailabilityServiceImplementation implements AvailabilityService {
 	public List<AvailabilitySlotDTO> getAvailabilityByDoctor(UUID doctorId) {
 		Doctor doctor = doctorRepository.getDoctorById(doctorId);
 		if (doctor == null) {
-			throw new RuntimeException("Doctor not Found");
+			throw new ResourceNotFoundException("Doctor not found");
 		}
 		return slotRepository.findByDoctorDoctorId(doctorId).stream()
 				.map(this::toDto)
@@ -64,7 +67,7 @@ public class AvailabilityServiceImplementation implements AvailabilityService {
 	@Override
 	public AvailabilitySlotDTO updateAvailability(UUID slotId, boolean available) {
 		AvailabilitySlot slot = slotRepository.findById(slotId)
-				.orElseThrow(() -> new RuntimeException("Availability slot not found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Availability slot not found"));
 		slot.setAvailable(available);
 		return toDto(slotRepository.save(slot));
 	}

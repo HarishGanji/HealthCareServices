@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.healthcare.system.dtos.DepartmentDTO;
+import com.healthcare.system.exception.ResourceNotFoundException;
 import com.healthcare.system.models.Administrator;
 import com.healthcare.system.models.Department;
 import com.healthcare.system.models.Doctor;
@@ -55,11 +56,11 @@ public class DepartmentServiceImplementation implements DepartmentService {
 		Department department = depRepo.getDepartmentById(departmentId);
 		Doctor doctor = docRepo.getDoctorById(doctorId);
 		if (department == null) {
-			throw new RuntimeException("Not Found Department");
+			throw new ResourceNotFoundException("Department not found");
 		}
 
 		if (doctor == null) {
-			throw new RuntimeException("Not Found doctor");
+			throw new ResourceNotFoundException("Doctor not found");
 		}
 		doctor.setDepartment(department);
 		docRepo.save(doctor);
@@ -71,10 +72,10 @@ public class DepartmentServiceImplementation implements DepartmentService {
 		Department department = depRepo.getDepartmentById(departmentId);
 		Administrator admin = adminRepo.getAdminById(adminId);
 		if (department == null) {
-			throw new RuntimeException("Not Found Department");
+			throw new ResourceNotFoundException("Department not found");
 		}
 		if (admin == null) {
-			throw new RuntimeException("Not Found Admin");
+			throw new ResourceNotFoundException("Admin not found");
 		}
 		admin.setDepartment(department);
 		adminRepo.save(admin);
@@ -86,10 +87,10 @@ public class DepartmentServiceImplementation implements DepartmentService {
 		Department department = depRepo.getDepartmentById(departmentId);
 		Doctor doctor = docRepo.getDoctorById(doctorId);
 		if (department == null) {
-			throw new RuntimeException("Not Found Department");
+			throw new ResourceNotFoundException("Department not found");
 		}
 		if (doctor == null) {
-			throw new RuntimeException("Not Found doctor");
+			throw new ResourceNotFoundException("Doctor not found");
 		}
 		department.setHeadDoctor(doctor);
 		return convertToDTO(depRepo.save(department));
