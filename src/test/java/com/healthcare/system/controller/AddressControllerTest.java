@@ -1,6 +1,6 @@
 package com.healthcare.system.controller;
 
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -35,24 +35,27 @@ class AddressControllerTest {
 	private AddressService addressService;
 
 	@Test
-	void addAddressReturnsAddressDto() throws Exception {
+	void addAddressToPatient_acceptsRoleParam() throws Exception {
 		UUID entityId = UUID.randomUUID();
-		Address request = new Address();
-		request.setStreet("123 Main St");
-		request.setCity("Austin");
-		request.setState("TX");
-		request.setZipCode("73301");
-		request.setCountry("USA");
-		AddressDTO response = new AddressDTO(UUID.randomUUID(), "123 Main St", "Austin", "TX", "73301", "USA");
+		Address address = new Address();
+		address.setCity("Austin");
+		address.setCountry("USA");
+		address.setState("TX");
+		address.setStreet("123 Main");
+		address.setZipCode("78701");
 
-		when(addressService.addAddress(eq(entityId), eq(request), eq("PATIENT"))).thenReturn(response);
+		AddressDTO response = new AddressDTO(UUID.randomUUID(), "123 Main", "Austin", "TX", "78701", "USA");
+
+		when(addressService.addAddress(entityId, address, "PATIENT")).thenReturn(response);
 
 		mockMvc.perform(post("/address/address/{entityId}", entityId)
-						.param("role", "PATIENT")
-						.contentType(MediaType.APPLICATION_JSON)
-						.content(objectMapper.writeValueAsString(request)))
+				.param("role", "PATIENT")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(address)))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.city").value("Austin"))
-				.andExpect(jsonPath("$.state").value("TX"));
+				.andExpect(jsonPath("$.country").value("USA"));
+
+		verify(addressService).addAddress(entityId, address, "PATIENT");
 	}
 }

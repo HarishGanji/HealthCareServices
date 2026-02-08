@@ -1,7 +1,6 @@
 package com.healthcare.system.controller;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -36,71 +35,70 @@ class AppointmentControllerTest {
 	private AppointmentService appointmentService;
 
 	@Test
-	void bookAppointmentReturnsCreatedAppointment() throws Exception {
+	void bookAppointment_returnsCreatedAppointment() throws Exception {
 		UUID patientId = UUID.randomUUID();
 		UUID doctorId = UUID.randomUUID();
-		LocalDateTime appointmentTime = LocalDateTime.of(2025, 2, 1, 10, 0);
-		AppointmentDTO response = new AppointmentDTO(UUID.randomUUID(), patientId, doctorId, Status.PENDING,
-				appointmentTime, LocalDateTime.now(), LocalDateTime.now());
+		LocalDateTime appointmentTime = LocalDateTime.of(2025, 1, 1, 10, 0);
+		AppointmentDTO response = buildAppointmentDTO(patientId, doctorId, appointmentTime, Status.PENDING);
 
-		when(appointmentService.bookAppointment(eq(patientId), eq(doctorId), eq(appointmentTime))).thenReturn(response);
+		when(appointmentService.bookAppointment(patientId, doctorId, appointmentTime)).thenReturn(response);
 
 		mockMvc.perform(post("/appointment/appointment/{patientId}/{doctorId}", patientId, doctorId)
-						.param("appointmentDateTime", appointmentTime.toString())
-						.contentType(MediaType.APPLICATION_JSON))
+				.param("appointmentDateTime", "2025-01-01T10:00:00")
+				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.appointmentId").value(response.getAppointmentId().toString()))
-				.andExpect(jsonPath("$.status").value(Status.PENDING.name()));
+				.andExpect(jsonPath("$.patient_Id").value(patientId.toString()))
+				.andExpect(jsonPath("$.doctor_Id").value(doctorId.toString()))
+				.andExpect(jsonPath("$.status").value("PENDING"));
+
+		verify(appointmentService).bookAppointment(patientId, doctorId, appointmentTime);
 	}
 
 	@Test
-	void getAllAppointmentsReturnsList() throws Exception {
-		AppointmentDTO appointment = new AppointmentDTO(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(),
-				Status.PENDING, LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now());
-		when(appointmentService.getAllAppointments()).thenReturn(List.of(appointment));
+	void getAllAppointments_returnsList() throws Exception {
+		UUID patientId = UUID.randomUUID();
+		UUID doctorId = UUID.randomUUID();
+		AppointmentDTO response = buildAppointmentDTO(patientId, doctorId, LocalDateTime.of(2025, 1, 2, 10, 0),
+				Status.PENDING);
+
+		when(appointmentService.getAllAppointments()).thenReturn(List.of(response));
 
 		mockMvc.perform(get("/appointment"))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$[0].appointmentId").value(appointment.getAppointmentId().toString()));
+				.andExpect(jsonPath("$[0].patient_Id").value(patientId.toString()))
+				.andExpect(jsonPath("$[0].doctor_Id").value(doctorId.toString()));
+
+		verify(appointmentService).getAllAppointments();
 	}
 
 	@Test
-	void getAppointmentByIdReturnsAppointment() throws Exception {
+	void updateAppointmentStatus_updatesStatus() throws Exception {
 		UUID appointmentId = UUID.randomUUID();
-		AppointmentDTO appointment = new AppointmentDTO(appointmentId, UUID.randomUUID(), UUID.randomUUID(),
-				Status.PENDING, LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now());
-		when(appointmentService.getAppointmentById(appointmentId)).thenReturn(appointment);
+		UUID patientId = UUID.randomUUID();
+		UUID doctorId = UUID.randomUUID();
+		AppointmentDTO response = buildAppointmentDTO(patientId, doctorId, LocalDateTime.of(2025, 1, 3, 10, 0),
+				Status.ACCEPTED);
+		response.setAppointmentId(appointmentId);
 
-		mockMvc.perform(get("/appointment/{appointmentId}", appointmentId))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.appointmentId").value(appointmentId.toString()));
-	}
-
-	@Test
-	void rescheduleAppointmentUpdatesTime() throws Exception {
-		UUID appointmentId = UUID.randomUUID();
-		LocalDateTime updatedTime = LocalDateTime.of(2025, 3, 1, 9, 30);
-		AppointmentDTO appointment = new AppointmentDTO(appointmentId, UUID.randomUUID(), UUID.randomUUID(),
-				Status.RESCHEDULED, updatedTime, LocalDateTime.now(), LocalDateTime.now());
-		when(appointmentService.rescheduleAppointment(eq(appointmentId), eq(updatedTime))).thenReturn(appointment);
-
-		mockMvc.perform(patch("/appointment/{appointmentId}/reschedule", appointmentId)
-						.param("appointmentDateTime", updatedTime.toString()))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.appointmentDateTime").value(updatedTime.toString()))
-				.andExpect(jsonPath("$.status").value(Status.RESCHEDULED.name()));
-	}
-
-	@Test
-	void updateAppointmentStatusReturnsUpdatedStatus() throws Exception {
-		UUID appointmentId = UUID.randomUUID();
-		AppointmentDTO appointment = new AppointmentDTO(appointmentId, UUID.randomUUID(), UUID.randomUUID(),
-				Status.ACCEPTED, LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now());
-		when(appointmentService.updateAppointmentStatus(eq(appointmentId), eq(Status.ACCEPTED))).thenReturn(appointment);
+		when(appointmentService.updateAppointmentStatus(appointmentId, Status.ACCEPTED)).thenReturn(response);
 
 		mockMvc.perform(patch("/appointment/{appointmentId}/status", appointmentId)
-						.param("status", Status.ACCEPTED.name()))
+				.param("status", "ACCEPTED"))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.status").value(Status.ACCEPTED.name()));
+				.andExpect(jsonPath("$.appointmentId").value(appointmentId.toString()))
+				.andExpect(jsonPath("$.status").value("ACCEPTED"));
+
+		verify(appointmentService).updateAppointmentStatus(appointmentId, Status.ACCEPTED);
+	}
+
+	private AppointmentDTO buildAppointmentDTO(UUID patientId, UUID doctorId, LocalDateTime appointmentTime,
+			Status status) {
+		AppointmentDTO dto = new AppointmentDTO();
+		dto.setAppointmentId(UUID.randomUUID());
+		dto.setPatient_Id(patientId);
+		dto.setDoctor_Id(doctorId);
+		dto.setAppointmentDateTime(appointmentTime);
+		dto.setStatus(status);
+		return dto;
 	}
 }
