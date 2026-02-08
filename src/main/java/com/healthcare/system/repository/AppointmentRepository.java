@@ -17,9 +17,16 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
 
 	boolean existsByDoctorAndAppointmentDateTime(Doctor doctor, LocalDateTime appointmentDateTime);
 
+	boolean existsByDoctorAndAppointmentDateTimeAndAppointmentIdNot(Doctor doctor, LocalDateTime appointmentDateTime,
+			UUID appointmentId);
+
+	List<Appointment> findByPatientPatientId(UUID patientId);
+
+	List<Appointment> findByDoctorDoctorId(UUID doctorId);
+
 //	@Query("SELECT COUNT(a) FROM Appointment a WHERE a.doctor = :doctor AND a.appointmentDateTime = :appointmentDateTime")
 //	long countAppointments(@Param("doctor") Doctor doctor, @Param("appointmentDateTime") LocalDateTime appointmentDateTime);
 
-	@Query("SELECT a FROM Appointment a WHERE a.doctor.id = :doctorId")
+	@Query("SELECT a FROM Appointment a WHERE a.doctor.doctorId = :doctorId")
 	List<Appointment> viewAllAppointments(@Param("doctorId") UUID doctorId);
 }
