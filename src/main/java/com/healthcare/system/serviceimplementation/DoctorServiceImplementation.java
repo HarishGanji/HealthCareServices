@@ -73,7 +73,7 @@ public class DoctorServiceImplementation implements DoctorService {
 
 	@Override
 	public List<Appointment> viewAllAppointmentsByDoctorId(UUID doctorId) {
-		return appointmentRepo.viewAllAppointments(doctorId);
+		return appointmentRepo.findByDoctorDoctorId(doctorId);
 	}
 
 }
