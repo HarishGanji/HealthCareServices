@@ -10,6 +10,9 @@ import org.springframework.stereotype.Repository;
 
 import com.healthcare.system.models.Department;
 
+/**
+ * Repository for department entities.
+ */
 @Repository
 public interface DepartmentRepository extends JpaRepository<Department, UUID> {
 

@@ -6,6 +6,9 @@ import com.healthcare.system.dtos.AuthResponse;
 import com.healthcare.system.dtos.RegisterDTO;
 import com.healthcare.system.dtos.UserProfileDTO;
 
+/**
+ * Service contract for authentication and user profile operations.
+ */
 public interface UserService {
 	
 	AuthResponse register(RegisterDTO user);

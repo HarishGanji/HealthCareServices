@@ -5,6 +5,9 @@ import java.util.UUID;
 import com.healthcare.system.dtos.AddressDTO;
 import com.healthcare.system.models.Administrator;
 
+/**
+ * Service contract for administrator profile management.
+ */
 public interface AdminService {
 	
 	String deleteDoctorById(UUID doctorId);

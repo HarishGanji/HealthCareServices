@@ -21,6 +21,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Core authentication user entity storing credentials and a single role.
+ * Implements Spring Security's {@link UserDetails} for authentication.
+ */
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor

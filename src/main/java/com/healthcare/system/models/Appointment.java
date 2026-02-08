@@ -22,6 +22,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Appointment entity linking a patient, doctor, and scheduled time with a status.
+ * Tracks creation/update timestamps for auditing.
+ */
 @Entity
 @Data
 @NoArgsConstructor
