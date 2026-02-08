@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,6 +24,7 @@ import com.healthcare.system.service.AddressService;
 
 @WebMvcTest(AddressController.class)
 @AutoConfigureMockMvc(addFilters = false)
+@WithMockUser(authorities = "ADMIN")
 class AddressControllerTest {
 
 	@Autowired
@@ -35,27 +37,26 @@ class AddressControllerTest {
 	private AddressService addressService;
 
 	@Test
-	void addAddressToPatient_acceptsRoleParam() throws Exception {
+	void addAddressReturnsAddressDto() throws Exception {
 		UUID entityId = UUID.randomUUID();
-		Address address = new Address();
-		address.setCity("Austin");
-		address.setCountry("USA");
-		address.setState("TX");
-		address.setStreet("123 Main");
-		address.setZipCode("78701");
+		Address request = new Address();
+		request.setStreet("123 Main St");
+		request.setCity("Austin");
+		request.setState("TX");
+		request.setZipCode("73301");
+		request.setCountry("USA");
+		AddressDTO response = new AddressDTO(UUID.randomUUID(), "123 Main St", "Austin", "TX", "73301", "USA");
 
-		AddressDTO response = new AddressDTO(UUID.randomUUID(), "123 Main", "Austin", "TX", "78701", "USA");
-
-		when(addressService.addAddress(entityId, address, "PATIENT")).thenReturn(response);
+		when(addressService.addAddress(entityId, request, "PATIENT")).thenReturn(response);
 
 		mockMvc.perform(post("/address/address/{entityId}", entityId)
-				.param("role", "PATIENT")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(address)))
+						.param("role", "PATIENT")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(objectMapper.writeValueAsString(request)))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.city").value("Austin"))
-				.andExpect(jsonPath("$.country").value("USA"));
+				.andExpect(jsonPath("$.state").value("TX"));
 
-		verify(addressService).addAddress(entityId, address, "PATIENT");
+		verify(addressService).addAddress(entityId, request, "PATIENT");
 	}
 }

@@ -27,6 +27,9 @@ import com.healthcare.system.service.UserService;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * User service implementation for registration, login, and profile lookup.
+ */
 @Service
 public class UserServiceImplementation implements UserService {
 

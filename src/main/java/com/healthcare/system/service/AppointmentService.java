@@ -7,6 +7,9 @@ import java.util.UUID;
 import com.healthcare.system.dtos.AppointmentDTO;
 import com.healthcare.system.enums.Status;
 
+/**
+ * Service contract for appointment booking and lifecycle management.
+ */
 public interface AppointmentService {
 	
 	AppointmentDTO bookAppointment(UUID patientId, UUID doctorId, LocalDateTime appointmentDateTime);

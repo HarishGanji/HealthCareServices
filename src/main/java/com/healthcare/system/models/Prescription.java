@@ -17,6 +17,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Prescription entity created by a doctor for a patient with medication details.
+ */
 @Entity
 @Data
 @NoArgsConstructor

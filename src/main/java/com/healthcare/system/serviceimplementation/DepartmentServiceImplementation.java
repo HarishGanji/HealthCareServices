@@ -18,6 +18,9 @@ import com.healthcare.system.service.DepartmentService;
 
 import jakarta.transaction.Transactional;
 
+/**
+ * Department service implementation for managing department structure and assignments.
+ */
 @Service
 public class DepartmentServiceImplementation implements DepartmentService {
 

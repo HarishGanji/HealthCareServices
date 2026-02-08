@@ -18,6 +18,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Department entity representing a hospital unit and its doctor/admin assignments.
+ */
 @Entity
 @Data
 @NoArgsConstructor

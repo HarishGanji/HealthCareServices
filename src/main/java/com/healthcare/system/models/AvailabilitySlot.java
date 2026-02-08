@@ -16,6 +16,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Availability slot published by a doctor to indicate bookable times.
+ */
 @Entity
 @Data
 @NoArgsConstructor

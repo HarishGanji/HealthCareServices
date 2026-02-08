@@ -5,6 +5,9 @@ import java.util.UUID;
 
 import com.healthcare.system.dtos.PrescriptionDTO;
 
+/**
+ * Service contract for creating and retrieving prescriptions.
+ */
 public interface PrescriptionService {
 
 	PrescriptionDTO createPrescription(UUID doctorId, UUID patientId, PrescriptionDTO prescription);

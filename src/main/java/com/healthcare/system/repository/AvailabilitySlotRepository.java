@@ -11,6 +11,9 @@ import org.springframework.data.repository.query.Param;
 import com.healthcare.system.models.AvailabilitySlot;
 import com.healthcare.system.models.Doctor;
 
+/**
+ * Repository for doctor availability slots and overlap queries.
+ */
 public interface AvailabilitySlotRepository extends JpaRepository<AvailabilitySlot, UUID> {
 
 	List<AvailabilitySlot> findByDoctorDoctorId(UUID doctorId);

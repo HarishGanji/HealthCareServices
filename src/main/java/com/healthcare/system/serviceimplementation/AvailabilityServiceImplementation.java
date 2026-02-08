@@ -15,6 +15,9 @@ import com.healthcare.system.repository.AvailabilitySlotRepository;
 import com.healthcare.system.repository.DoctorRepository;
 import com.healthcare.system.service.AvailabilityService;
 
+/**
+ * Availability service implementation for doctor scheduling.
+ */
 @Service
 public class AvailabilityServiceImplementation implements AvailabilityService {
 

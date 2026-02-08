@@ -18,6 +18,9 @@ import com.healthcare.system.repository.DoctorRepository;
 import com.healthcare.system.repository.PatientRepository;
 import com.healthcare.system.service.AppointmentService;
 
+/**
+ * Appointment service implementation for booking and managing appointment lifecycle.
+ */
 @Service
 public class AppointmentServiceImplementation implements AppointmentService{
 	

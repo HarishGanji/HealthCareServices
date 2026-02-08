@@ -9,6 +9,9 @@ import org.springframework.stereotype.Repository;
 
 import com.healthcare.system.models.Patient;
 
+/**
+ * Repository for patient entities and profile lookup queries.
+ */
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, UUID> {
 

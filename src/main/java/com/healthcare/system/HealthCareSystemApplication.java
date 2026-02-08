@@ -10,6 +10,9 @@ import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.Components;
 
+/**
+ * Main Spring Boot application entry point.
+ */
 @SpringBootApplication
 public class HealthCareSystemApplication {
 

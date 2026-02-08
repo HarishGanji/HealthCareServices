@@ -16,6 +16,9 @@ import com.healthcare.system.repository.PatientRepository;
 import com.healthcare.system.repository.PrescriptionRepository;
 import com.healthcare.system.service.PrescriptionService;
 
+/**
+ * Prescription service implementation for doctor and patient access.
+ */
 @Service
 public class PrescriptionServiceImplementation implements PrescriptionService {
 

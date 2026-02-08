@@ -7,6 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.healthcare.system.models.Prescription;
 
+/**
+ * Repository for prescription entities.
+ */
 public interface PrescriptionRepository extends JpaRepository<Prescription, UUID> {
 
 	List<Prescription> findByPatientPatientId(UUID patientId);

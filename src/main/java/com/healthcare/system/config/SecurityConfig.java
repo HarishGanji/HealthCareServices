@@ -15,6 +15,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.healthcare.system.security.JwtAuthenticationFilter;
 
+/**
+ * Spring Security configuration using JWT authentication and stateless sessions.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity

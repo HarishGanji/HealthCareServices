@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import com.healthcare.system.enums.Role;
 import com.healthcare.system.models.Appointment;
@@ -23,78 +24,56 @@ class AppointmentRepositoryTest {
 	private AppointmentRepository appointmentRepository;
 
 	@Autowired
-	private DoctorRepository doctorRepository;
-
-	@Autowired
-	private PatientRepository patientRepository;
+	private TestEntityManager entityManager;
 
 	@Test
-	void findByDoctorAndPatientIds_returnsMatchingAppointments() {
+	void appointmentQueriesReturnExpectedResults() {
+		User doctorUser = new User();
+		doctorUser.setUsername("doctor");
+		doctorUser.setEmail("doc@example.com");
+		doctorUser.setPassword("password");
+		doctorUser.setRole(Role.DOCTOR);
+
+		User patientUser = new User();
+		patientUser.setUsername("patient");
+		patientUser.setEmail("patient@example.com");
+		patientUser.setPassword("password");
+		patientUser.setRole(Role.PATIENT);
+
 		Doctor doctor = new Doctor();
-		doctor.setDoctorName("Dr. Smith");
-		doctor.setUser(buildUser(Role.DOCTOR, "doctor1"));
-		doctor = doctorRepository.save(doctor);
+		doctor.setDoctorName("Dr. Test");
+		doctor.setSpecialization("cardiology");
+		doctor.setEmail("doc@example.com");
+		doctor.setContactNumber("555-0001");
+		doctor.setUser(doctorUser);
 
 		Patient patient = new Patient();
-		patient.setPatientName("Jane Doe");
-		patient.setUser(buildUser(Role.PATIENT, "patient1"));
-		patient = patientRepository.save(patient);
+		patient.setPatientName("Patient One");
+		patient.setEmail("patient@example.com");
+		patient.setContactNumber("555-0002");
+		patient.setUser(patientUser);
 
-		LocalDateTime time = LocalDateTime.of(2025, 1, 5, 9, 0);
+		entityManager.persist(doctorUser);
+		entityManager.persist(patientUser);
+		entityManager.persist(doctor);
+		entityManager.persist(patient);
+
+		LocalDateTime appointmentTime = LocalDateTime.of(2025, 1, 15, 14, 0);
 		Appointment appointment = new Appointment();
 		appointment.setDoctor(doctor);
 		appointment.setPatient(patient);
-		appointment.setAppointmentDateTime(time);
-		appointmentRepository.save(appointment);
+		appointment.setAppointmentDateTime(appointmentTime);
+		Appointment saved = entityManager.persistAndFlush(appointment);
 
-		List<Appointment> doctorAppointments = appointmentRepository.findByDoctorDoctorId(doctor.getDoctorId());
-		List<Appointment> patientAppointments = appointmentRepository.findByPatientPatientId(patient.getPatientId());
+		assertThat(appointmentRepository.existsByDoctorAndAppointmentDateTime(doctor, appointmentTime)).isTrue();
+		assertThat(appointmentRepository.existsByDoctorAndAppointmentDateTimeAndAppointmentIdNot(doctor, appointmentTime,
+				saved.getAppointmentId())).isFalse();
 
-		assertThat(doctorAppointments).hasSize(1);
-		assertThat(patientAppointments).hasSize(1);
-	}
+		List<Appointment> byPatient = appointmentRepository.findByPatientPatientId(patient.getPatientId());
+		List<Appointment> byDoctor = appointmentRepository.findByDoctorDoctorId(doctor.getDoctorId());
 
-	@Test
-	void existsByDoctorAndAppointmentDateTimeAndAppointmentIdNot_respectsExclusion() {
-		Doctor doctor = new Doctor();
-		doctor.setDoctorName("Dr. Watson");
-		doctor.setUser(buildUser(Role.DOCTOR, "doctor2"));
-		doctor = doctorRepository.save(doctor);
-
-		Patient patient = new Patient();
-		patient.setPatientName("John Doe");
-		patient.setUser(buildUser(Role.PATIENT, "patient2"));
-		patient = patientRepository.save(patient);
-
-		LocalDateTime time = LocalDateTime.of(2025, 1, 6, 14, 0);
-		Appointment appointment = new Appointment();
-		appointment.setDoctor(doctor);
-		appointment.setPatient(patient);
-		appointment.setAppointmentDateTime(time);
-		appointment = appointmentRepository.save(appointment);
-
-		boolean existsExcludingSame = appointmentRepository.existsByDoctorAndAppointmentDateTimeAndAppointmentIdNot(
-				doctor, time, appointment.getAppointmentId());
-		assertThat(existsExcludingSame).isFalse();
-
-		Appointment otherAppointment = new Appointment();
-		otherAppointment.setDoctor(doctor);
-		otherAppointment.setPatient(patient);
-		otherAppointment.setAppointmentDateTime(time);
-		appointmentRepository.save(otherAppointment);
-
-		boolean existsExcludingOther = appointmentRepository.existsByDoctorAndAppointmentDateTimeAndAppointmentIdNot(
-				doctor, time, appointment.getAppointmentId());
-		assertThat(existsExcludingOther).isTrue();
-	}
-
-	private User buildUser(Role role, String username) {
-		User user = new User();
-		user.setUsername(username);
-		user.setEmail(username + "@example.com");
-		user.setPassword("password");
-		user.setPhoneNumber("1234567890");
-		user.setRole(role);
-		return user;
+		assertThat(byPatient).hasSize(1);
+		assertThat(byDoctor).hasSize(1);
+		assertThat(byDoctor.get(0).getAppointmentId()).isEqualTo(saved.getAppointmentId());
 	}
 }

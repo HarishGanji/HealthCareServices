@@ -6,6 +6,9 @@ import java.util.UUID;
 
 import com.healthcare.system.dtos.AvailabilitySlotDTO;
 
+/**
+ * Service contract for managing doctor availability slots.
+ */
 public interface AvailabilityService {
 
 	AvailabilitySlotDTO createAvailabilitySlot(UUID doctorId, LocalDateTime startTime, LocalDateTime endTime);
