@@ -9,6 +9,9 @@ import org.springframework.stereotype.Repository;
 
 import com.healthcare.system.models.Address;
 
+/**
+ * Repository for persisting and querying {@link Address} entities.
+ */
 @Repository
 public interface AddressRepository extends JpaRepository<Address, UUID> {
 	

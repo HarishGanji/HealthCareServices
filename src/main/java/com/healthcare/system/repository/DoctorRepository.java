@@ -10,8 +10,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.healthcare.system.models.Doctor;
-import com.healthcare.system.models.Patient;
 
+/**
+ * Repository for doctor entities and query helpers.
+ */
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, UUID> {
 

@@ -12,6 +12,9 @@ import org.springframework.stereotype.Repository;
 import com.healthcare.system.models.Appointment;
 import com.healthcare.system.models.Doctor;
 
+/**
+ * Repository for appointment persistence and query helpers.
+ */
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, UUID> {
 

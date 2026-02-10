@@ -8,6 +8,9 @@ import org.springframework.stereotype.Repository;
 
 import com.healthcare.system.models.PasswordResetOTP;
 
+/**
+ * Repository for OTP reset tokens.
+ */
 @Repository
 public interface PasswordResetRepository extends JpaRepository<PasswordResetOTP, UUID>{
 	

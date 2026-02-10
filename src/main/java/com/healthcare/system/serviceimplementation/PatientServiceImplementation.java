@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.healthcare.system.dtos.AddressDTO;
+import com.healthcare.system.exception.ResourceNotFoundException;
 import com.healthcare.system.models.Patient;
 import com.healthcare.system.models.User;
 import com.healthcare.system.repository.AddressRepository;
@@ -13,6 +14,9 @@ import com.healthcare.system.repository.PatientRepository;
 import com.healthcare.system.repository.UserRepository;
 import com.healthcare.system.service.PatientService;
 
+/**
+ * Patient service implementation for profile completion and lookups.
+ */
 @Service
 public class PatientServiceImplementation implements PatientService {
 
@@ -42,7 +46,7 @@ public class PatientServiceImplementation implements PatientService {
 			pat.setUser(user);
 			return patientRepo.save(pat);
 		} else {
-			throw new RuntimeException("User NOT Found");
+			throw new ResourceNotFoundException("User not found");
 		}
 
 	}
@@ -53,8 +57,8 @@ public class PatientServiceImplementation implements PatientService {
 				.map(address -> addressRepo.findById(address.getAddressId())
 						.map(addr -> new AddressDTO(addr.getAddressId(), addr.getStreet(), addr.getCity(),
 								addr.getState(), addr.getZipCode(), addr.getCountry()))
-						.orElseThrow(() -> new IllegalArgumentException("Address not found")))
-				.orElseThrow(() -> new IllegalArgumentException("Patient not found"));
+						.orElseThrow(() -> new ResourceNotFoundException("Address not found")))
+				.orElseThrow(() -> new ResourceNotFoundException("Patient not found"));
 	}
 	
 }
