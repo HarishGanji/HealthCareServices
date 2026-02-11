@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.healthcare.system.dtos.AddressDTO;
+import com.healthcare.system.exception.ResourceNotFoundException;
 import com.healthcare.system.models.Address;
 import com.healthcare.system.models.Administrator;
 import com.healthcare.system.models.Doctor;
@@ -16,6 +17,9 @@ import com.healthcare.system.repository.DoctorRepository;
 import com.healthcare.system.repository.PatientRepository;
 import com.healthcare.system.service.AddressService;
 
+/**
+ * Address service implementation that attaches addresses to patient, doctor, or admin profiles.
+ */
 @Service
 public class AddressServiceImplementation implements AddressService {
 
@@ -57,7 +61,7 @@ public class AddressServiceImplementation implements AddressService {
 	public AddressDTO addAddress(UUID entityId, Address address, String entityType) {
 		Object obj = getObjectById(entityId, entityType);
 		if(obj == null) {
-			throw new IllegalArgumentException("Not found");
+			throw new ResourceNotFoundException("Entity not found");
 		}
 		if(obj instanceof Patient) {
 			Address ad = new Address();
@@ -66,6 +70,7 @@ public class AddressServiceImplementation implements AddressService {
 			ad.setState(address.getState());
 			ad.setStreet(address.getStreet());
 			ad.setZipCode(address.getZipCode());
+			ad.setPatient((Patient) obj);
 			((Patient) obj).setAddress(ad);
 			return convertToAddressDto(addressRepo.save(ad));
 		}else if(obj instanceof Administrator) {
@@ -75,6 +80,7 @@ public class AddressServiceImplementation implements AddressService {
 			ad.setState(address.getState());
 			ad.setStreet(address.getStreet());
 			ad.setZipCode(address.getZipCode());
+			ad.setAdministrator((Administrator) obj);
 			((Administrator) obj).setAddress(ad);
 			return convertToAddressDto(addressRepo.save(ad));
 		}else if(obj instanceof Doctor) {
@@ -84,11 +90,12 @@ public class AddressServiceImplementation implements AddressService {
 			ad.setState(address.getState());
 			ad.setStreet(address.getStreet());
 			ad.setZipCode(address.getZipCode());
+			ad.setDoctor((Doctor) obj);
 			((Doctor) obj).setAddress(ad);
 			return convertToAddressDto(addressRepo.save(ad));
 		}
 		else {
-			throw new IllegalArgumentException("Not found");
+			throw new ResourceNotFoundException("Entity not found");
 		}
 	}
 
