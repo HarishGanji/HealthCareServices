@@ -85,3 +85,10 @@ authentication with role-based authorization at the controller layer and JPA for
 - **Default profile** uses an in-memory H2 database (`application.yml`).
 - **Local profile** uses PostgreSQL (`application-local.yml`). Enable with
   `spring.profiles.active=local`.
+
+
+## Notification Integration
+- Healthcare service now uses a Feign client to call `notification-service`.
+- Doctor gets notified when a patient raises online prescription request.
+- Patient gets notified when doctor publishes online prescription response.
+- Detailed implementation plan: `docs/NOTIFICATION_MICROSERVICE_PLAN.md`.

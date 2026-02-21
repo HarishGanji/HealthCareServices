@@ -25,3 +25,7 @@ springdoc:
     operations-sorter: alpha
   api-docs:
     path: /v3/api-docs
+
+services:
+  notification:
+    url: http://localhost:9091

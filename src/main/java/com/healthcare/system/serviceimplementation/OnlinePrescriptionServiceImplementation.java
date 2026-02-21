@@ -18,6 +18,7 @@ import com.healthcare.system.dtos.OnlinePrescriptionRequestDTO;
 import com.healthcare.system.enums.OnlinePrescriptionRequestStatus;
 import com.healthcare.system.enums.Status;
 import com.healthcare.system.exception.BadRequestException;
+import com.healthcare.system.integration.notification.NotificationGateway;
 import com.healthcare.system.exception.ResourceNotFoundException;
 import com.healthcare.system.models.Appointment;
 import com.healthcare.system.models.Doctor;
@@ -42,17 +43,20 @@ public class OnlinePrescriptionServiceImplementation implements OnlinePrescripti
 	private final DoctorRepository doctorRepository;
 	private final OnlinePrescriptionRequestRepository requestRepository;
 	private final PrescriptionRepository prescriptionRepository;
+	private final NotificationGateway notificationGateway;
 
 	public OnlinePrescriptionServiceImplementation(AppointmentRepository appointmentRepository,
 			PatientRepository patientRepository,
 			DoctorRepository doctorRepository,
 			OnlinePrescriptionRequestRepository requestRepository,
-			PrescriptionRepository prescriptionRepository) {
+			PrescriptionRepository prescriptionRepository,
+			NotificationGateway notificationGateway) {
 		this.appointmentRepository = appointmentRepository;
 		this.patientRepository = patientRepository;
 		this.doctorRepository = doctorRepository;
 		this.requestRepository = requestRepository;
 		this.prescriptionRepository = prescriptionRepository;
+		this.notificationGateway = notificationGateway;
 	}
 
 	@Override
@@ -78,7 +82,9 @@ public class OnlinePrescriptionServiceImplementation implements OnlinePrescripti
 		request.setStatus(OnlinePrescriptionRequestStatus.REQUESTED);
 		request.setRequestedAt(LocalDateTime.now());
 
-		return toDto(requestRepository.save(request));
+		OnlinePrescriptionRequest savedRequest = requestRepository.save(request);
+		notificationGateway.sendPrescriptionRequestRaised(savedRequest.getDoctor().getEmail(), savedRequest.getPatient().getPatientName());
+		return toDto(savedRequest);
 	}
 
 	@Override
@@ -110,7 +116,9 @@ public class OnlinePrescriptionServiceImplementation implements OnlinePrescripti
 		request.setRespondedAt(LocalDateTime.now());
 		request.setPrescription(savedPrescription);
 
-		return toDto(requestRepository.save(request));
+		OnlinePrescriptionRequest savedRequest = requestRepository.save(request);
+		notificationGateway.sendPrescriptionReady(savedRequest.getPatient().getEmail());
+		return toDto(savedRequest);
 	}
 
 	@Override
