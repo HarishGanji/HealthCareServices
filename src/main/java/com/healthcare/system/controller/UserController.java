@@ -13,6 +13,9 @@ import com.healthcare.system.dtos.UserProfileDTO;
 import com.healthcare.system.models.User;
 import com.healthcare.system.service.UserService;
 
+/**
+ * Authentication and user profile endpoints for registration, login, and profile lookup.
+ */
 @RestController
 @RequestMapping("/auth")
 public class UserController {
@@ -40,6 +43,7 @@ public class UserController {
     
     
     @PostMapping("/reset-password")
+    @org.springframework.security.access.prepost.PreAuthorize("hasAnyAuthority('ADMIN', 'DOCTOR', 'PATIENT')")
     public ResponseEntity<String> resetPassword(@RequestParam String email, 
                                                 @RequestParam String newPassword) {
         userService.resetPassword(email, newPassword);
@@ -47,9 +51,9 @@ public class UserController {
     }
     
     @GetMapping("/role-based-user")
+    @org.springframework.security.access.prepost.PreAuthorize("hasAnyAuthority('ADMIN', 'DOCTOR', 'PATIENT')")
     public ResponseEntity<UserProfileDTO> getUserProfile(@RequestParam String email) {
         UserProfileDTO profileDTO = userService.getUserProfile(email);
         return ResponseEntity.ok(profileDTO);
     }
 }
-

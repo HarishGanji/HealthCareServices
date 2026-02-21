@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.healthcare.system.dtos.AddressDTO;
+import com.healthcare.system.exception.ResourceNotFoundException;
 import com.healthcare.system.models.Appointment;
 import com.healthcare.system.models.Doctor;
 import com.healthcare.system.models.Patient;
@@ -16,6 +17,9 @@ import com.healthcare.system.repository.AppointmentRepository;
 import com.healthcare.system.repository.DoctorRepository;
 import com.healthcare.system.service.DoctorService;
 
+/**
+ * Doctor service implementation for profile completion and lookups.
+ */
 @Service
 public class DoctorServiceImplementation implements DoctorService {
 
@@ -43,8 +47,8 @@ public class DoctorServiceImplementation implements DoctorService {
 				.map(address -> addressRepo.findById(address.getAddressId())
 						.map(addr -> new AddressDTO(addr.getAddressId(), addr.getStreet(), addr.getCity(),
 								addr.getState(), addr.getZipCode(), addr.getCountry()))
-						.orElseThrow(() -> new IllegalArgumentException("Address not found")))
-				.orElseThrow(() -> new IllegalArgumentException("Doctor not found"));
+						.orElseThrow(() -> new ResourceNotFoundException("Address not found")))
+				.orElseThrow(() -> new ResourceNotFoundException("Doctor not found"));
 	}
 
 	@Override
@@ -61,7 +65,7 @@ public class DoctorServiceImplementation implements DoctorService {
 			doc.setUser(user);
 			return doctorRepo.save(doc);
 		} else {
-			throw new RuntimeException("User NOT Found");
+			throw new ResourceNotFoundException("User not found");
 		}
 
 	}
@@ -73,7 +77,7 @@ public class DoctorServiceImplementation implements DoctorService {
 
 	@Override
 	public List<Appointment> viewAllAppointmentsByDoctorId(UUID doctorId) {
-		return appointmentRepo.viewAllAppointments(doctorId);
+		return appointmentRepo.findByDoctorDoctorId(doctorId);
 	}
 
 }

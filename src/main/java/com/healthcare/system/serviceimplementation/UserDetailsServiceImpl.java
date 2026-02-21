@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.healthcare.system.repository.UserRepository;
 
+/**
+ * Spring Security UserDetailsService implementation for loading users by username.
+ */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 

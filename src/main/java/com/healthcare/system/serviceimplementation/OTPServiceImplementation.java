@@ -11,6 +11,9 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Random;
 
+/**
+ * OTP service implementation for password reset flows.
+ */
 @Service
 public class OTPServiceImplementation implements OTPService {
 
@@ -84,4 +87,3 @@ public class OTPServiceImplementation implements OTPService {
 //  }
 //  return false;
 //}
-
