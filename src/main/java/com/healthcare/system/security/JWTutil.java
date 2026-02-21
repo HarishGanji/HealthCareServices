@@ -30,7 +30,8 @@ public class JWTutil {
 
 	public String generateToken(UserDetails userDetails) {
 		User user = (User) userDetails; 
-		return Jwts.builder().subject(userDetails.getUsername())
+		return Jwts.builder()
+				.subject(userDetails.getUsername())
 				.claim("userId", user.getUserId().toString())
 	            .claim("role", user.getRole().name()).issuedAt(new Date(System.currentTimeMillis()))
 				.expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME)).signWith(key).compact();
